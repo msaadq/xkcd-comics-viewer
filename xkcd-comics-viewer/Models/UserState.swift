@@ -13,20 +13,21 @@ import Combine
 class UserState: ObservableObject {
     @Published var comicsList: [Comic] = []
     @Published var searchResults: [Comic] = []
+    @Published var scrollPosition: Int = 0
     @Published var connectionOnline = true
+    
+    static let defaultComicsCount: Int = 20
     
     var cancellable: AnyCancellable?
     
     private var latestComicID: Int!
-    private static let defaultComicsCount: Int = 20
     
     // MARK: - Public API
     
     // MARK: - Load latest comic with additional recent comics
     func loadLatestComic(additionalCount: Int = defaultComicsCount) {
-        assert(additionalCount >= 0)
         connectionOnline = Reachability.isConnectedToNetwork()
-        guard connectionOnline else { return }
+        guard connectionOnline, additionalCount >= 0 else { return }
         
         self.comicsList = []
         
@@ -41,15 +42,15 @@ class UserState: ObservableObject {
             }, receiveValue: {
                 self.comicsList.append($0)
                 self.latestComicID = $0.id
-                self.loadComicsFrom(comicID: self.latestComicID, count: additionalCount)
+                self.scrollPosition = self.latestComicID - 1
+                self.loadComicsFrom(comicID: self.latestComicID - 1, count: additionalCount)
             })
     }
     
     // MARK: - load additional recent comics starting from a comic position
     func loadComicsFrom(comicID: Int, count: Int = defaultComicsCount) {
-        assert(comicID > 0 && count > 0)
         connectionOnline = Reachability.isConnectedToNetwork()
-        guard connectionOnline else { return }
+        guard connectionOnline, comicID > 0 && count > 0 else { return }
         
         cancellable = APIService.shared.getAPIResponseMapper(modelObject: Comic.self, endpoint: .comicByID(id: comicID))
             .sink(receiveCompletion: { (completion) in
@@ -94,9 +95,8 @@ class UserState: ObservableObject {
     // MARK: - Search for comics using a search term of comic ID
     private func loadComicsWith(comicIDs: [Int]) {
         var correctComicIDs = comicIDs.filter { $0 <= latestComicID && $0 > 0 }
-        assert(correctComicIDs.count > 0)
         connectionOnline = Reachability.isConnectedToNetwork()
-        guard connectionOnline else { return }
+        guard connectionOnline, correctComicIDs.count > 0 else { return }
         
         cancellable = APIService.shared.getAPIResponseMapper(modelObject: Comic.self, endpoint: .comicByID(id: correctComicIDs.first!))
             .sink(receiveCompletion: { (completion) in

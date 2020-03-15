@@ -10,25 +10,28 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selection = 0
- 
+    @EnvironmentObject var userState: UserState
+    
     var body: some View {
         TabView(selection: $selection){
-            Text("First View")
-                .font(.title)
+            ComicsList().environmentObject(userState)
                 .tabItem {
                     VStack {
-                        Image("first")
+                        Image(systemName: "list.dash")
                     }
-                }
-                .tag(0)
-            Text("Second View")
-                .font(.title)
+            }
+            .tag(0)
+            Search().environmentObject(userState)
                 .tabItem {
                     VStack {
-                        Image("second")
+                        Image(systemName: "magnifyingglass")
                     }
-                }
-                .tag(1)
+            }
+            .tag(1)
+        }.onAppear() {
+            self.userState.loadLatestComic(additionalCount: 20)
+        }.onDisappear() {
+            self.userState.cancellable?.cancel()
         }
     }
 }

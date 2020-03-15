@@ -26,6 +26,7 @@ struct Comic: Hashable, Codable, Identifiable {
     }
 }
 
+// MARK: - Sample Comic loader and custom decoding
 extension Comic {
     static func loadSampleComic() -> Comic? {
         let sampleComic = """
