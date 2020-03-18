@@ -10,45 +10,42 @@ import SwiftUI
 
 struct ComicsList: View {
     @EnvironmentObject var userState: UserState
-    @State var loadingMoreItems: Bool = true
+    @State var indexForUpdate = UserState.defaultComicsCount
     
     var body: some View {
         NavigationView {
             List {
                 // TODO: - How to get index of cell
-//                if true {
-//                    self.userState.loadComicsFrom(comicID: $0.id)
-//                }
-//                if $0 == 20 {
-//                    self.userState.loadComicsFrom(comicID:  self.userState.comicsList[$0].id)
-//                }
-                ForEach(userState.comicsList) { comic in
-                    ComicCell(comic: comic).onAppear {
-                        let loadInAdvance = UserState.defaultComicsCount - 1
-                        if comic.id == self.userState.scrollPosition - loadInAdvance {
-                            print("New Load!")
-                            self.userState.loadComicsFrom(comicID:  comic.id - 1)
-                            self.userState.scrollPosition = comic.id - 1
+                ForEach(userState.comicsList.enumerated().map { $0 }, id: \.element.id) { index, comic in
+                    NavigationLink(
+                        destination: ComicDetails(comic: comic)
+                    ) {
+                        ComicCell(comic: comic).onAppear {
+                            if index == self.indexForUpdate {
+                                self.indexForUpdate += UserState.defaultComicsCount + 1
+                                self.userState.loadComicsFrom(comicID: comic.id - 1)
+                            }
                         }
                     }
                 }
-            
-                if self.userState.scrollPosition > 0 {
-                    VStack(alignment: .center) {
+                
+                if self.userState.continueLoadingComics {
+                    VStack {
                         ActivityIndicator(isAnimating: true)
                     }
                 }
             }
+            .navigationBarTitle("Comics List")
         }
     }
 }
 
 struct ActivityIndicator: UIViewRepresentable {
-
+    
     typealias UIView = UIActivityIndicatorView
     var isAnimating: Bool
     fileprivate var configuration = { (indicator: UIView) in }
-
+    
     func makeUIView(context: UIViewRepresentableContext<Self>) -> UIView { UIView() }
     func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<Self>) {
         isAnimating ? uiView.startAnimating() : uiView.stopAnimating()

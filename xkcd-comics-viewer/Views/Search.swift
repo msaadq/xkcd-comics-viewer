@@ -15,48 +15,64 @@ struct Search: View {
     var body: some View {
         NavigationView {
             VStack {
-                SearchBar(text: $searchText, placeholder: "Search comic by ID or name")
+                SearchView()
                 Spacer()
             }
+            .navigationBarTitle("Search")
         }
     }
 }
 
-struct SearchBar: UIViewRepresentable {
+struct SearchView: UIViewRepresentable {
+    let controller = UISearchController()
+    func makeUIView(context: UIViewRepresentableContext<SearchView>) -> UISearchBar {
+        self.controller.searchBar
+    }
     
-    @Binding var text: String
-    var placeholder: String
-    
-    class Coordinator: NSObject, UISearchBarDelegate {
+    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchView>) {
         
-        @Binding var text: String
-        
-        init(text: Binding<String>) {
-            _text = text
-        }
-        
-        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-            text = searchText
-        }
     }
     
-    func makeCoordinator() -> SearchBar.Coordinator {
-        return Coordinator(text: $text)
-    }
+    typealias UIViewType = UISearchBar
     
-    func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {
-        let searchBar = UISearchBar(frame: .zero)
-        searchBar.delegate = context.coordinator
-        searchBar.placeholder = placeholder
-        searchBar.searchBarStyle = .minimal
-        searchBar.autocapitalizationType = .none
-        return searchBar
-    }
     
-    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBar>) {
-        uiView.text = text
-    }
 }
+
+//struct SearchBar: UIViewRepresentable {
+//
+//    @Binding var text: String
+//    var placeholder: String
+//
+//    class Coordinator: NSObject, UISearchBarDelegate {
+//
+//        @Binding var text: String
+//
+//        init(text: Binding<String>) {
+//            _text = text
+//        }
+//
+//        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//            text = searchText
+//        }
+//    }
+//
+//    func makeCoordinator() -> SearchBar.Coordinator {
+//        return Coordinator(text: $text)
+//    }
+//
+//    func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {
+//        let searchBar = UISearchBar(frame: .zero)
+//        searchBar.delegate = context.coordinator
+//        searchBar.placeholder = placeholder
+//        searchBar.searchBarStyle = .minimal
+//        searchBar.autocapitalizationType = .none
+//        return searchBar
+//    }
+//
+//    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBar>) {
+//        uiView.text = text
+//    }
+//}
 
 struct Search_Previews: PreviewProvider {
     static var previews: some View {
