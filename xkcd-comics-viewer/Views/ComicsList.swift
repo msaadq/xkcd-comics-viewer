@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ComicsList: View {
     @EnvironmentObject var userState: UserState
-    @State var indexForUpdate = UserState.defaultComicsCount
+    @State var indexForUpdate = UserState.defaultComicsCount - 1
     
     var body: some View {
         NavigationView {
@@ -22,7 +22,7 @@ struct ComicsList: View {
                     ) {
                         ComicCell(comic: comic).onAppear {
                             if index == self.indexForUpdate {
-                                self.indexForUpdate += UserState.defaultComicsCount + 1
+                                self.indexForUpdate += UserState.defaultComicsCount
                                 self.userState.loadComicsFrom(comicID: comic.id - 1)
                             }
                         }

@@ -14,17 +14,23 @@ class UserState: ObservableObject {
     @Published var comicsList: [Comic] = []
     @Published var comicDetails: Comic!
     @Published var searchResults: [Comic] = []
+    @Published var searchText: String = ""
     @Published var selectedComicIndex: Int!
     @Published var continueLoadingComics = true
     @Published var connectionOnline = true
     
-    static let defaultComicsCount: Int = 20
+    static let defaultComicsCount: Int = 10
     
     var cancellable: AnyCancellable?
     
     private var latestComicID: Int!
     
     // MARK: - Public API
+    
+    enum LoadingContext {
+        case comicsList
+        case comicsSearch
+    }
     
     // MARK: - Load latest comic with additional recent comics
     func loadLatestComic(additionalCount: Int = defaultComicsCount) {
@@ -53,20 +59,18 @@ class UserState: ObservableObject {
         guard connectionOnline, comicID > 0 && count > 0 else { return }
         
         self.continueLoadingComics = true
-        
-        let comicIDs = Array(comicID-count...comicID)
-        self.loadComicsWith(comicIDs: comicIDs)
+        let comicIDs = Array(comicID-(count-1)...comicID)
+        self.loadComicsWith(comicIDs: comicIDs, context: .comicsList)
     }
     
     // MARK: - Load all comics using a list of comic IDs
-    func loadComicsWith(comicIDs: [Int]) {
+    func loadComicsWith(comicIDs: [Int], context: LoadingContext) {
         let correctComicIDs = comicIDs.filter { $0 > 0 }
         connectionOnline = Reachability.isConnectedToNetwork()
         guard connectionOnline, correctComicIDs.count > 0 else { return }
         
         let publishers = correctComicIDs.map {
             APIService.shared.getAPIResponseMapper(modelObject: Comic.self, endpoint: .comicByID(id: $0)) }
-        print(publishers.count)
         
         let result = publishers.dropFirst().reduce(into: AnyPublisher(publishers[0].map{[$0]})) {
             res, just in
@@ -77,19 +81,25 @@ class UserState: ObservableObject {
         }
         
         self.cancellable = result
-        .sink(receiveCompletion: { (completion) in
-            switch completion {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .finished:
-                print("Success")
-            }
-        }, receiveValue: {
-            self.comicsList += $0.sorted { $0.id > $1.id }
-            if self.comicsList.last?.id == 1 {
-                self.continueLoadingComics = false
-            }
-        })
+            .sink(receiveCompletion: { (completion) in
+                switch completion {
+                case .failure(let error):
+                    print(error.localizedDescription)
+                case .finished:
+                    print("Success")
+                }
+            }, receiveValue: {
+                switch context {
+                case .comicsList:
+                    self.comicsList += $0.sorted { $0.id > $1.id }
+                case .comicsSearch:
+                    self.searchResults += $0
+                }
+                
+                if self.comicsList.last?.id == 1 {
+                    self.continueLoadingComics = false
+                }
+            })
     }
     
     // MARK: - Load details of a comic including the image and explanation
@@ -106,7 +116,7 @@ class UserState: ObservableObject {
                     print("Success")
                 }
             }, receiveValue: {_ in
-//                self.comicDetails = com
+                //                self.comicDetails = com
             })
     }
     
@@ -120,7 +130,7 @@ class UserState: ObservableObject {
         
         if let comicID = Int(name) { comicIDs.append(comicID) }
         
-        cancellable = APIService.shared.getAPIResponseMapper(modelObject: String.self, baseURL: APIService.comicSearchBaseURL, endpoint: .search(name: name))
+        cancellable = APIService.shared.getAPIStringResponseMapper(baseURL: APIService.comicSearchBaseURL, endpoint: .search(name: name))
             .sink(receiveCompletion: { (completion) in
                 switch completion {
                 case .failure(let error):
@@ -130,7 +140,7 @@ class UserState: ObservableObject {
                 }
             }, receiveValue: {
                 comicIDs = comicIDs + $0.split(separator: "\n").compactMap { Int($0.split(separator: " ").first!) }.filter { $0 != 0 }
-                self.loadComicsWith(comicIDs: comicIDs)
+                self.loadComicsWith(comicIDs: comicIDs, context: .comicsSearch)
             })
     }
     

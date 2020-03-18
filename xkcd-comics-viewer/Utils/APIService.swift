@@ -46,7 +46,7 @@ class APIService {
             case let .comicByID(id):
                 return "\(id)/info.0.json"
             case let .search(name):
-                return "process?action=xkcd&query=\(name)}"
+                return "process?action=xkcd&query=\(name)"
             case let .explain(id):
                 return "\(id)"
             }
@@ -60,6 +60,26 @@ class APIService {
 
         return getRemoteDataPublisher(url: request)
             .decode(type: T.self, decoder: JSONDecoder())
+            .mapError{ error in
+                if type(of: error) == Swift.DecodingError.self {
+                    print("JSON decoding error")
+                    return APIError.decodingError
+                }
+                return APIError.unknownError(error: error)
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: - URL String Request Mapper
+    func getAPIStringResponseMapper(baseURL: URL? = comicBaseURL, endpoint: Endpoint) -> AnyPublisher<String, APIService.APIError> {
+        var request = URLRequest(url: URL(string: baseURL!.absoluteString + endpoint.path())!)
+        request.httpMethod = "GET"
+
+        return getRemoteDataPublisher(url: request)
+            .map {data in
+                return String(decoding: data, as: UTF8.self)
+            }
             .mapError{ error in
                 if type(of: error) == Swift.DecodingError.self {
                     print("JSON decoding error")
