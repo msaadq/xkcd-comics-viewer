@@ -15,10 +15,9 @@ struct ComicsList: View {
     var body: some View {
         NavigationView {
             List {
-                // TODO: - How to get index of cell
                 ForEach(userState.comicsList.enumerated().map { $0 }, id: \.element.id) { index, comic in
                     NavigationLink(
-                        destination: ComicDetails(comic: comic)
+                        destination: ComicDetails(comic: self.$userState.comicsList[index])
                     ) {
                         ComicCell(comic: comic).onAppear {
                             if index == self.indexForUpdate {
@@ -37,25 +36,6 @@ struct ComicsList: View {
             }
             .navigationBarTitle("Comics List")
         }
-    }
-}
-
-struct ActivityIndicator: UIViewRepresentable {
-    
-    typealias UIView = UIActivityIndicatorView
-    var isAnimating: Bool
-    fileprivate var configuration = { (indicator: UIView) in }
-    
-    func makeUIView(context: UIViewRepresentableContext<Self>) -> UIView { UIView() }
-    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<Self>) {
-        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
-        configuration(uiView)
-    }
-}
-
-extension View where Self == ActivityIndicator {
-    func configure(_ configuration: @escaping (Self.UIView)->Void) -> Self {
-        Self.init(isAnimating: self.isAnimating, configuration: configuration)
     }
 }
 

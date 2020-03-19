@@ -9,19 +9,25 @@
 import SwiftUI
 
 struct ComicDetails: View {
-    var comic: Comic
+    @Binding var comic: Comic
     
     var body: some View {
         VStack {
             Text(comic.title)
-            Text("")
+            if self.comic.image != nil {
+                Image(uiImage: self.comic.image!)
+            }
             Spacer()
+        }.onAppear {
+            self.comic.image = UIImage(systemName: "pencil")
+        }.onDisappear {
+            self.comic.image = nil
         }
     }
 }
 
-struct ComicDetails_Previews: PreviewProvider {
-    static var previews: some View {
-        ComicDetails(comic: Comic.loadSampleComic()!)
-    }
-}
+//struct ComicDetails_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ComicDetails(comic: Comic.loadSampleComic()!)
+//    }
+//}

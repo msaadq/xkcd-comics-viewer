@@ -93,6 +93,7 @@ class UserState: ObservableObject {
                 case .comicsList:
                     self.comicsList += $0.sorted { $0.id > $1.id }
                 case .comicsSearch:
+                    self.searchResults = []
                     self.searchResults += $0
                 }
                 
@@ -125,7 +126,6 @@ class UserState: ObservableObject {
         connectionOnline = Reachability.isConnectedToNetwork()
         guard connectionOnline else { return }
         
-        self.searchResults = []
         var comicIDs: [Int] = []
         
         if let comicID = Int(name) { comicIDs.append(comicID) }

@@ -12,16 +12,26 @@ struct ComicCell: View {
     var comic: Comic
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(comic.safeTitle + " " + String(comic.id))
-            // TODO: - How to print date
-            //Text("\(comic.publishedDate)")
+        HStack {
+            Text("\(comic.id)").font(.body).frame(width: 40)
+            VStack(alignment: .leading, spacing: 10) {
+                Text(comic.title).font(.title)
+                Text(comic.publishedDate!.relativeTime).font(.caption)
+                // TODO: - How to print date
+                //Text("\(comic.publishedDate)")
+            }.padding()
         }
+        
     }
 }
 
 struct ComicCell_Previews: PreviewProvider {
     static var previews: some View {
-        ComicCell(comic: Comic.loadSampleComic()!)
+        Group {
+            ComicCell(comic: Comic.loadSampleComic()[0])
+            ComicCell(comic: Comic.loadSampleComic()[1])
+            ComicCell(comic: Comic.loadSampleComic()[2])
+        }
+        .previewLayout(.sizeThatFits)
     }
 }

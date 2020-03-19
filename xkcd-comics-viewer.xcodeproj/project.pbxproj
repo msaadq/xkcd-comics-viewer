@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		933925932422E888001F1FAB /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933925922422E888001F1FAB /* DateComponents.swift */; };
+		933925962422FDE4001F1FAB /* SampleComics.json in Resources */ = {isa = PBXBuildFile; fileRef = 933925952422FDE4001F1FAB /* SampleComics.json */; };
+		9339259824230449001F1FAB /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9339259724230449001F1FAB /* Date.swift */; };
+		9339259A24230959001F1FAB /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9339259924230959001F1FAB /* ActivityIndicator.swift */; };
 		939587C8241E543A00F56776 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939587C7241E543A00F56776 /* AppDelegate.swift */; };
 		939587CA241E543A00F56776 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939587C9241E543A00F56776 /* SceneDelegate.swift */; };
 		939587CD241E543A00F56776 /* xkcd_comics_viewer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 939587CB241E543A00F56776 /* xkcd_comics_viewer.xcdatamodeld */; };
@@ -44,6 +48,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		933925922422E888001F1FAB /* DateComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateComponents.swift; sourceTree = "<group>"; };
+		933925952422FDE4001F1FAB /* SampleComics.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SampleComics.json; sourceTree = "<group>"; };
+		9339259724230449001F1FAB /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		9339259924230959001F1FAB /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		939587C4241E543A00F56776 /* xkcd-comics-viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "xkcd-comics-viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		939587C7241E543A00F56776 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		939587C9241E543A00F56776 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +102,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		933925942422FDC8001F1FAB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				933925952422FDE4001F1FAB /* SampleComics.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		939587BB241E543A00F56776 = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +140,7 @@
 				939587FC241E546100F56776 /* Supporting Views */,
 				939587FD241E546C00F56776 /* Utils */,
 				939587D0241E543B00F56776 /* Assets.xcassets */,
+				933925942422FDC8001F1FAB /* Resources */,
 				939587D8241E543B00F56776 /* Info.plist */,
 				939587D5241E543B00F56776 /* LaunchScreen.storyboard */,
 				939587CB241E543A00F56776 /* xkcd_comics_viewer.xcdatamodeld */,
@@ -182,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				93B04E34241EB4D50028BB90 /* ComicCell.swift */,
+				9339259924230959001F1FAB /* ActivityIndicator.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -199,6 +217,8 @@
 		939587FE241E547000F56776 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				933925922422E888001F1FAB /* DateComponents.swift */,
+				9339259724230449001F1FAB /* Date.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -308,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				939587D7241E543B00F56776 /* LaunchScreen.storyboard in Resources */,
+				933925962422FDE4001F1FAB /* SampleComics.json in Resources */,
 				939587D4241E543B00F56776 /* Preview Assets.xcassets in Resources */,
 				939587D1241E543B00F56776 /* Assets.xcassets in Resources */,
 			);
@@ -335,13 +356,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				93B04E33241EB1080028BB90 /* Search.swift in Sources */,
+				9339259A24230959001F1FAB /* ActivityIndicator.swift in Sources */,
 				939587C8241E543A00F56776 /* AppDelegate.swift in Sources */,
 				939587CD241E543A00F56776 /* xkcd_comics_viewer.xcdatamodeld in Sources */,
 				93958806241E697700F56776 /* UserState.swift in Sources */,
+				933925932422E888001F1FAB /* DateComponents.swift in Sources */,
 				93958804241E566E00F56776 /* Comic.swift in Sources */,
 				93B04E31241EB1000028BB90 /* ComicDetails.swift in Sources */,
 				93B04E2F241EB0F60028BB90 /* ComicsList.swift in Sources */,
 				939587CF241E543A00F56776 /* ContentView.swift in Sources */,
+				9339259824230449001F1FAB /* Date.swift in Sources */,
 				93958801241E562B00F56776 /* Reachability.swift in Sources */,
 				93B04E35241EB4D50028BB90 /* ComicCell.swift in Sources */,
 				93958802241E562B00F56776 /* APIService.swift in Sources */,

@@ -15,16 +15,24 @@ struct Search: View {
         NavigationView {
             VStack {
                 SearchBar(text: $userState.searchText)
-                List(self.userState.searchResults) { comic in
-                    NavigationLink(
-                        destination: ComicDetails(comic: comic)
-                    ) {
-                        ComicCell(comic: comic)
+                if !userState.searchText.isEmpty && self.userState.searchResults == [] {
+                    Spacer()
+                    ActivityIndicator(isAnimating: true)
+                    Spacer()
+                } else if self.userState.searchResults != [] {
+                    List(userState.searchResults.enumerated().map { $0 }, id: \.element.id) { index, comic in
+                        NavigationLink(
+                            destination: ComicDetails(comic: self.$userState.searchResults[index])
+                        ) {
+                            ComicCell(comic: comic)
+                        }
                     }
-                }.onReceive(self.userState.$searchText) {
-                    guard !$0.isEmpty else { self.userState.searchResults = []; return }
-                    self.userState.searchComics(name: $0)
+                } else {
+                    Spacer()
                 }
+            }.onReceive(self.userState.$searchText) {
+                guard !$0.isEmpty else { self.userState.searchResults = []; return }
+                self.userState.searchComics(name: $0)
             }
             .navigationBarTitle("Search")
         }
