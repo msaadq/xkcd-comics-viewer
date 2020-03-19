@@ -14,27 +14,49 @@ struct ComicsList: View {
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(userState.comicsList.enumerated().map { $0 }, id: \.element.id) { index, comic in
-                    NavigationLink(
-                        destination: ComicDetails(comic: self.$userState.comicsList[index])
-                    ) {
-                        ComicCell(comic: comic).onAppear {
-                            if index == self.indexForUpdate {
-                                self.indexForUpdate += UserState.defaultComicsCount
-                                self.userState.loadComicsFrom(comicID: comic.id - 1)
+            VStack {
+                if !self.userState.connectionOnline {
+                    VStack (spacing: 10) {
+                        Text("No Internet Connection").font(.title)
+                        Button(action: {
+                            self.indexForUpdate = UserState.defaultComicsCount - 1
+                            self.userState.loadLatestComic() }) {
+                            Text("Tap to Retry!")
+                        }
+                    }
+                } else {
+                    if self.userState.comicsList.count == 0 {
+                        ActivityIndicator(isAnimating: true)
+                    }
+                    else {
+                        List {
+                            ForEach(userState.comicsList.enumerated().map { $0 }, id: \.element.id) { index, comic in
+                                NavigationLink(
+                                    destination: ComicDetails(comic: comic).environmentObject(self.userState)
+                                ) {
+                                    ComicCell(comic: comic).onAppear {
+                                        if index == self.indexForUpdate {
+                                            self.indexForUpdate += UserState.defaultComicsCount
+                                            self.userState.loadComicsFrom(comicID: comic.id - 1)
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if self.userState.continueLoadingComics {
+                                VStack {
+                                    ActivityIndicator(isAnimating: true)
+                                }
                             }
                         }
                     }
                 }
-                
-                if self.userState.continueLoadingComics {
-                    VStack {
-                        ActivityIndicator(isAnimating: true)
-                    }
-                }
             }
-            .navigationBarTitle("Comics List")
+            .navigationBarTitle("Comics")
+        }.onAppear {
+            if self.userState.comicsList.count >= UserState.defaultComicsCount {
+                self.indexForUpdate = self.userState.comicsList.count - 1
+            }
         }
     }
 }

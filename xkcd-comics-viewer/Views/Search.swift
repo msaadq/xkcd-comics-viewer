@@ -17,12 +17,22 @@ struct Search: View {
                 SearchBar(text: $userState.searchText)
                 if !userState.searchText.isEmpty && self.userState.searchResults == [] {
                     Spacer()
-                    ActivityIndicator(isAnimating: true)
+                    if !self.userState.connectionOnline {
+                        VStack (spacing: 10) {
+                            Text("No Internet Connection").font(.title)
+                            Button(action: {
+                                self.userState.searchComics(name: self.userState.searchText) }) {
+                                    Text("Tap to Retry!")
+                            }
+                        }
+                    } else {
+                        ActivityIndicator(isAnimating: true)
+                    }
                     Spacer()
                 } else if self.userState.searchResults != [] {
                     List(userState.searchResults.enumerated().map { $0 }, id: \.element.id) { index, comic in
                         NavigationLink(
-                            destination: ComicDetails(comic: self.$userState.searchResults[index])
+                            destination: ComicDetails(comic: comic).environmentObject(self.userState)
                         ) {
                             ComicCell(comic: comic)
                         }

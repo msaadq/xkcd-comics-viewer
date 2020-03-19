@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 // MARK: - User State
 class UserState: ObservableObject {
@@ -15,13 +16,13 @@ class UserState: ObservableObject {
     @Published var comicDetails: Comic!
     @Published var searchResults: [Comic] = []
     @Published var searchText: String = ""
-    @Published var selectedComicIndex: Int!
     @Published var continueLoadingComics = true
     @Published var connectionOnline = true
     
-    static let defaultComicsCount: Int = 10
+    static let defaultComicsCount: Int = 20
     
     var cancellable: AnyCancellable?
+    var detailsCancellable: AnyCancellable?
     
     private var latestComicID: Int!
     
@@ -108,7 +109,7 @@ class UserState: ObservableObject {
         connectionOnline = Reachability.isConnectedToNetwork()
         guard connectionOnline else { return }
         
-        cancellable = APIService.shared.getImageFetcher(imageUrl: comic.imageURL)
+        detailsCancellable = APIService.shared.getImageFetcher(imageUrl: comic.imageURL)
             .sink(receiveCompletion: { (completion) in
                 switch completion {
                 case .failure(let error):
@@ -116,8 +117,10 @@ class UserState: ObservableObject {
                 case .finished:
                     print("Success")
                 }
-            }, receiveValue: {_ in
-                //                self.comicDetails = com
+            }, receiveValue: {
+                print("Details success")
+                self.comicDetails = comic
+                self.comicDetails.image = $0
             })
     }
     

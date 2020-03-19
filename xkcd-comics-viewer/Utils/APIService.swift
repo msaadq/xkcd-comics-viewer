@@ -104,7 +104,7 @@ class APIService {
                 }
                 return image
             }
-            .replaceError(with: UIImage(named: "FailedPlaceholder")!)
+            .replaceError(with: UIImage(systemName: "exclamationmark.circle.fill")!)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

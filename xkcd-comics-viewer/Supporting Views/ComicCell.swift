@@ -16,9 +16,7 @@ struct ComicCell: View {
             Text("\(comic.id)").font(.body).frame(width: 40)
             VStack(alignment: .leading, spacing: 10) {
                 Text(comic.title).font(.title)
-                Text(comic.publishedDate!.relativeTime).font(.caption)
-                // TODO: - How to print date
-                //Text("\(comic.publishedDate)")
+                Text(comic.publishedDate!.relativeTime).font(.caption).italic()
             }.padding()
         }
         

@@ -9,25 +9,68 @@
 import SwiftUI
 
 struct ComicDetails: View {
-    @Binding var comic: Comic
+    @EnvironmentObject var userState: UserState
+    @State var comic: Comic
+    @State var imageFullscreen = false
+    @State var shouldAllowLandscape = false
     
     var body: some View {
-        VStack {
-            Text(comic.title)
-            if self.comic.image != nil {
-                Image(uiImage: self.comic.image!)
+        ScrollView(.vertical, showsIndicators: true) {
+            VStack(alignment: .center, spacing: 20) {
+                if !self.userState.connectionOnline {
+                    VStack (spacing: 10) {
+                        Text("No Internet Connection").font(.title)
+                        Button(action: {
+                            self.userState.loadComicDetails(comic: self.comic) }) {
+                                Text("Tap to Retry!")
+                        }
+                    }
+                } else {
+                    Text(comic.title).font(.title)
+                    if comic.image != nil {
+                        Button(action: { self.imageFullscreen = self.shouldAllowLandscape } ) {
+                            VStack(spacing: 6) {
+                                if self.shouldAllowLandscape {
+                                    Text("(Tap to enlarge)").font(.caption)
+                                }
+                                Image(uiImage: comic.image!).renderingMode(.original).resizable().aspectRatio(contentMode: .fit)
+                            }
+                        }.disabled(!shouldAllowLandscape)
+                            .sheet(isPresented: $imageFullscreen) {
+                                ImageLandscapeView(image: self.comic.image!)
+                        }
+                        
+                    } else {
+                        ActivityIndicator(isAnimating: true)
+                    }
+                    Text("Posted: \(comic.publishedDate!.relativeTime)").font(.caption).italic()
+                    Text(comic.alt).font(.caption).multilineTextAlignment(.center)
+                    Spacer()
+                }
             }
-            Spacer()
-        }.onAppear {
-            self.comic.image = UIImage(systemName: "pencil")
-        }.onDisappear {
-            self.comic.image = nil
+            .padding()
         }
+        .onAppear {
+            self.userState.loadComicDetails(comic: self.comic)
+        }.onDisappear(){
+            self.userState.comicDetails = nil
+        }.onReceive(self.userState.$comicDetails) {
+            self.comic.image = $0?.image
+            
+            if let image = self.comic.image {
+                self.shouldAllowLandscape = image.size.height < image.size.width * 0.8
+            }
+        }
+        .navigationBarTitle(Text("# \(comic.id)"))
     }
 }
 
-//struct ComicDetails_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ComicDetails(comic: Comic.loadSampleComic()!)
-//    }
-//}
+struct ComicDetails_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            ComicDetails(comic: Comic.loadSampleComic()[0])
+            ComicDetails(comic: Comic.loadSampleComic()[1])
+            ComicDetails(comic: Comic.loadSampleComic()[2])
+        }.environmentObject(UserState())
+    }
+}

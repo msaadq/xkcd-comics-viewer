@@ -17,19 +17,21 @@ struct ContentView: View {
             ComicsList().environmentObject(userState)
                 .tabItem {
                     VStack {
-                        Image(systemName: "list.dash")
-                    }
+                        Image(systemName: "list.dash").font(.title)
+                        Text("Comics")
+                    }.accentColor(.red)
             }
             .tag(0)
             Search().environmentObject(userState)
                 .tabItem {
                     VStack {
-                        Image(systemName: "magnifyingglass")
+                        Image(systemName: "magnifyingglass").font(.title)
+                        Text("Search")
                     }
             }
             .tag(1)
         }.onAppear() {
-            self.userState.loadLatestComic(additionalCount: 20)
+            self.userState.loadLatestComic()
         }.onDisappear() {
             self.userState.cancellable?.cancel()
         }
