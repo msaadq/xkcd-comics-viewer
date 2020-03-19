@@ -49,7 +49,7 @@ struct ComicDetails: View {
                                     .aspectRatio(contentMode: .fit)
                             }
                         }
-                        .disabled(!shouldAllowLandscape)
+                        .disabled(!(shouldAllowLandscape && UIDevice.current.userInterfaceIdiom != .pad))
                         .sheet(isPresented: $imageFullscreen) {
                             ImageLandscapeView(image: self.comic.image!)
                         }
