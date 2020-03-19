@@ -13,9 +13,14 @@ struct ComicCell: View {
     
     var body: some View {
         HStack {
-            Text("\(comic.id)")
-                .font(.body)
-                .frame(width: 40)
+            VStack(alignment: .center, spacing: 6) {
+                Text("#")
+                    .bold()
+                Text("\(comic.id)")
+                    .font(.caption)
+                    .bold()
+                    .frame(width: 35)
+            }
             VStack(alignment: .leading, spacing: 10) {
                 Text(comic.title)
                     .font(.title)

@@ -39,7 +39,7 @@ struct ComicDetails: View {
                             
                         }){
                             VStack(spacing: 6) {
-                                if self.shouldAllowLandscape {
+                                if self.shouldAllowLandscape && UIDevice.current.userInterfaceIdiom != .pad {
                                     Text("(Tap to enlarge)")
                                         .font(.caption)
                                 }
@@ -87,11 +87,13 @@ struct ComicDetails: View {
             // MARK: - Clears up the memory after back navigation in the stack
             self.userState.comicDetails = nil
         }
-        .onReceive(self.userState.$comicDetails) {
+        .onReceive(self.userState.$comicDetails) {comic in
             // MARK: - Updated the local comic object after image is retrieved
-            self.comic.image = $0?.image
-            if let image = self.comic.image {
-                self.shouldAllowLandscape = image.size.height < image.size.width * 0.8
+            DispatchQueue.main.async {
+                self.comic.image = comic?.image
+                if let image = self.comic.image {
+                    self.shouldAllowLandscape = image.size.height < image.size.width * 0.8
+                }
             }
         }
         .navigationBarTitle(Text("# \(comic.id)"))
