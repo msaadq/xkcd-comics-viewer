@@ -7,11 +7,27 @@
 //
 
 import SwiftUI
+import WebKit
+  
+struct WebView : UIViewRepresentable {
+      
+    let request: URLRequest
+      
+    func makeUIView(context: Context) -> WKWebView  {
+        return WKWebView()
+    }
+      
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        uiView.load(request)
+    }
+      
+}
 
 struct ComicDetails: View {
     @EnvironmentObject var userState: UserState
     @State var comic: Comic
     @State var imageFullscreen = false
+    @State var explanationFullscreen = false
     @State var shouldAllowLandscape = false
     
     var body: some View {
@@ -45,6 +61,14 @@ struct ComicDetails: View {
                     }
                     Text("Posted: \(comic.publishedDate!.relativeTime)").font(.caption).italic()
                     Text(comic.alt).font(.caption).multilineTextAlignment(.center)
+                    Button(action: {
+                        self.userState.connectionOnline = Reachability.isConnectedToNetwork()
+                        self.explanationFullscreen = self.userState.connectionOnline }) {
+                        Text("Show Explanation")
+                    }
+                    .sheet(isPresented: self.$explanationFullscreen) {
+                        ExplanationView(urlString: "\(APIService.comicExplanationBaseURL)\(APIService.Endpoint.explain(id: self.comic.id).path())")
+                    }
                     Spacer()
                 }
             }
@@ -56,7 +80,6 @@ struct ComicDetails: View {
             self.userState.comicDetails = nil
         }.onReceive(self.userState.$comicDetails) {
             self.comic.image = $0?.image
-            
             if let image = self.comic.image {
                 self.shouldAllowLandscape = image.size.height < image.size.width * 0.8
             }
