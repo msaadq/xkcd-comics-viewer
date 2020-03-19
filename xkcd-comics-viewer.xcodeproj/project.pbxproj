@@ -26,6 +26,8 @@
 		93958804241E566E00F56776 /* Comic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93958803241E566E00F56776 /* Comic.swift */; };
 		93958806241E697700F56776 /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93958805241E697700F56776 /* UserState.swift */; };
 		93AE988B24234CC200BC57D7 /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AE988A24234CC200BC57D7 /* ExplanationView.swift */; };
+		93AE988D2423569400BC57D7 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AE988C2423569400BC57D7 /* SearchBar.swift */; };
+		93AE988F2423576500BC57D7 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AE988E2423576500BC57D7 /* View.swift */; };
 		93B04E2F241EB0F60028BB90 /* ComicsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B04E2E241EB0F60028BB90 /* ComicsList.swift */; };
 		93B04E31241EB1000028BB90 /* ComicDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B04E30241EB1000028BB90 /* ComicDetails.swift */; };
 		93B04E33241EB1080028BB90 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B04E32241EB1080028BB90 /* Search.swift */; };
@@ -55,7 +57,7 @@
 		9339259724230449001F1FAB /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		9339259924230959001F1FAB /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		9339259B24232117001F1FAB /* ImageLandscapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLandscapeView.swift; sourceTree = "<group>"; };
-		939587C4241E543A00F56776 /* xkcd-comics-viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "xkcd-comics-viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		939587C4241E543A00F56776 /* Comics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		939587C7241E543A00F56776 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		939587C9241E543A00F56776 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		939587CC241E543A00F56776 /* xkcd_comics_viewer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = xkcd_comics_viewer.xcdatamodel; sourceTree = "<group>"; };
@@ -75,6 +77,8 @@
 		93958803241E566E00F56776 /* Comic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comic.swift; sourceTree = "<group>"; };
 		93958805241E697700F56776 /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		93AE988A24234CC200BC57D7 /* ExplanationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
+		93AE988C2423569400BC57D7 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		93AE988E2423576500BC57D7 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		93B04E2E241EB0F60028BB90 /* ComicsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicsList.swift; sourceTree = "<group>"; };
 		93B04E30241EB1000028BB90 /* ComicDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetails.swift; sourceTree = "<group>"; };
 		93B04E32241EB1080028BB90 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
@@ -127,7 +131,7 @@
 		939587C5241E543A00F56776 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				939587C4241E543A00F56776 /* xkcd-comics-viewer.app */,
+				939587C4241E543A00F56776 /* Comics.app */,
 				939587DD241E543B00F56776 /* xkcd-comics-viewerTests.xctest */,
 				939587E8241E543C00F56776 /* xkcd-comics-viewerUITests.xctest */,
 			);
@@ -206,6 +210,7 @@
 			children = (
 				93B04E34241EB4D50028BB90 /* ComicCell.swift */,
 				9339259924230959001F1FAB /* ActivityIndicator.swift */,
+				93AE988C2423569400BC57D7 /* SearchBar.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -225,6 +230,7 @@
 			children = (
 				933925922422E888001F1FAB /* DateComponents.swift */,
 				9339259724230449001F1FAB /* Date.swift */,
+				93AE988E2423576500BC57D7 /* View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -246,7 +252,7 @@
 			);
 			name = "xkcd-comics-viewer";
 			productName = "xkcd-comics-viewer";
-			productReference = 939587C4241E543A00F56776 /* xkcd-comics-viewer.app */;
+			productReference = 939587C4241E543A00F56776 /* Comics.app */;
 			productType = "com.apple.product-type.application";
 		};
 		939587DC241E543B00F56776 /* xkcd-comics-viewerTests */ = {
@@ -366,6 +372,8 @@
 				939587C8241E543A00F56776 /* AppDelegate.swift in Sources */,
 				939587CD241E543A00F56776 /* xkcd_comics_viewer.xcdatamodeld in Sources */,
 				93958806241E697700F56776 /* UserState.swift in Sources */,
+				93AE988D2423569400BC57D7 /* SearchBar.swift in Sources */,
+				93AE988F2423576500BC57D7 /* View.swift in Sources */,
 				933925932422E888001F1FAB /* DateComponents.swift in Sources */,
 				93958804241E566E00F56776 /* Comic.swift in Sources */,
 				93B04E31241EB1000028BB90 /* ComicDetails.swift in Sources */,
@@ -552,7 +560,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.saad.test.xkcd-comics-viewer";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Comics;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -572,7 +580,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.saad.test.xkcd-comics-viewer";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Comics;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

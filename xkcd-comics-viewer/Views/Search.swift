@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// MARK: - Search tab for seaching comics by ID and name
 struct Search: View {
     @EnvironmentObject var userState: UserState
     
@@ -17,6 +18,7 @@ struct Search: View {
                 SearchBar(text: $userState.searchText)
                 if !userState.searchText.isEmpty && self.userState.searchResults == [] {
                     Spacer()
+                    // MARK: - Network connection error message
                     if !self.userState.connectionOnline {
                         VStack (spacing: 10) {
                             Text("No Internet Connection").font(.title)
@@ -26,10 +28,12 @@ struct Search: View {
                             }
                         }
                     } else {
+                        // MARK: - Loading indicator while search is performed
                         ActivityIndicator(isAnimating: true)
                     }
                     Spacer()
                 } else if self.userState.searchResults != [] {
+                    // MARK: - List of search results
                     List(userState.searchResults.enumerated().map { $0 }, id: \.element.id) { index, comic in
                         NavigationLink(
                             destination: ComicDetails(comic: comic).environmentObject(self.userState)
@@ -41,54 +45,12 @@ struct Search: View {
                     Spacer()
                 }
             }.onReceive(self.userState.$searchText) {
+                // MARK: - Search operation on searchText update
                 guard !$0.isEmpty else { self.userState.searchResults = []; return }
                 self.userState.searchComics(name: $0)
             }
             .navigationBarTitle("Search")
         }
-    }
-}
-
-struct SearchBar : UIViewRepresentable {
-    
-    @Binding var text : String
-    
-    class Cordinator : NSObject, UISearchBarDelegate {
-        
-        @Binding var text : String
-        
-        init(text : Binding<String>) {
-            _text = text
-        }
-        
-        func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-            text = searchBar.text ?? ""
-            searchBar.resignFirstResponder()
-        }
-        
-        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-            if searchText.isEmpty {
-                text = searchText
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    searchBar.resignFirstResponder()
-                }
-            }
-        }
-    }
-    
-    func makeCoordinator() -> SearchBar.Cordinator {
-        return Cordinator(text: $text)
-    }
-    
-    func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {
-        let searchBar = UISearchBar(frame: .zero)
-        searchBar.delegate = context.coordinator
-        searchBar.placeholder = "Search comics by ID or text"
-        return searchBar
-    }
-    
-    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBar>) {
-        uiView.text = text
     }
 }
 

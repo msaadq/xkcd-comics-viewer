@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// MARK: - ImageLandscapeView for displaying a zoomed in version of landscape comics
 struct ImageLandscapeView: View {
     @Environment(\.presentationMode) var presentationMode
     var image: UIImage

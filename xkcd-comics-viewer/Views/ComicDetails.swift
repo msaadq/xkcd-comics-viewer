@@ -8,21 +8,8 @@
 
 import SwiftUI
 import WebKit
-  
-struct WebView : UIViewRepresentable {
-      
-    let request: URLRequest
-      
-    func makeUIView(context: Context) -> WKWebView  {
-        return WKWebView()
-    }
-      
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        uiView.load(request)
-    }
-      
-}
 
+// MARK: - ComicDetails for showing the complete comic with image
 struct ComicDetails: View {
     @EnvironmentObject var userState: UserState
     @State var comic: Comic
@@ -33,6 +20,7 @@ struct ComicDetails: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .center, spacing: 20) {
+                // MARK: - Network connection error message
                 if !self.userState.connectionOnline {
                     VStack (spacing: 10) {
                         Text("No Internet Connection").font(.title)
@@ -42,6 +30,7 @@ struct ComicDetails: View {
                         }
                     }
                 } else {
+                    // MARK: - Comic title and image with tap button
                     Text(comic.title).font(.title)
                     if comic.image != nil {
                         Button(action: { self.imageFullscreen = self.shouldAllowLandscape } ) {
@@ -57,8 +46,10 @@ struct ComicDetails: View {
                         }
                         
                     } else {
+                        // MARK: - Loading indicator while the image is not loaded
                         ActivityIndicator(isAnimating: true)
                     }
+                    // MARK: - Comic posting date, description and explanation view button
                     Text("Posted: \(comic.publishedDate!.relativeTime)").font(.caption).italic()
                     Text(comic.alt).font(.caption).multilineTextAlignment(.center)
                     Button(action: {
@@ -75,10 +66,13 @@ struct ComicDetails: View {
             .padding()
         }
         .onAppear {
+            // MARK: - Loads the comic image
             self.userState.loadComicDetails(comic: self.comic)
         }.onDisappear(){
+            // MARK: - Clears up the memory after back navigation in the stack
             self.userState.comicDetails = nil
         }.onReceive(self.userState.$comicDetails) {
+            // MARK: - Updated the local comic object after image is retrieved
             self.comic.image = $0?.image
             if let image = self.comic.image {
                 self.shouldAllowLandscape = image.size.height < image.size.width * 0.8

@@ -72,7 +72,7 @@ class APIService {
     }
     
     // MARK: - URL String Request Mapper
-    func getAPIStringResponseMapper(baseURL: URL? = comicBaseURL, endpoint: Endpoint) -> AnyPublisher<String, APIService.APIError> {
+    func getAPIStringResponseMapper(baseURL: URL? = comicSearchBaseURL, endpoint: Endpoint) -> AnyPublisher<String, APIService.APIError> {
         var request = URLRequest(url: URL(string: baseURL!.absoluteString + endpoint.path())!)
         request.httpMethod = "GET"
 
@@ -109,7 +109,7 @@ class APIService {
             .eraseToAnyPublisher()
     }
     
-    // MARK: - Loading Sample Resource for Testing Purposes
+    // MARK: - Sample Resource loader (for Testing Purposes)
     func loadSampleResource<T: Decodable>(_ filename: String) -> T {
         let data: Data
         
@@ -131,6 +131,8 @@ class APIService {
             fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
         }
     }
+    
+    // MARK: - Private Methods
     
     // MARK: - Private URL Request Publisher
     private func getRemoteDataPublisher(url: URLRequest) -> AnyPublisher<Data, Error> {

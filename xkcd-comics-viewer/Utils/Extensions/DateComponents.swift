@@ -8,7 +8,7 @@
 
 import Foundation
 
-// MARK: - DateComponents: to parse the date returned by served to Date object
+// MARK: - DateComponents extension to parse the date from day, month and year info
 extension DateComponents {
     static func dateFrom(day: Int, month: Int, year: Int) -> Date? {
         var dateComponents = DateComponents()

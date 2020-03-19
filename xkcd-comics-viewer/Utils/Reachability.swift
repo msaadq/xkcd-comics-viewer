@@ -9,7 +9,7 @@
 import Foundation
 import SystemConfiguration
 
-// MARK: - Reachability
+// MARK: - Reachability for checking network connection
 public class Reachability {
 
     // MARK: - Public API

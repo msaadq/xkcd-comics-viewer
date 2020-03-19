@@ -34,9 +34,9 @@ class UserState: ObservableObject {
     }
     
     // MARK: - Load latest comic with additional recent comics
-    func loadLatestComic(additionalCount: Int = defaultComicsCount) {
+    func loadLatestComic() {
         connectionOnline = Reachability.isConnectedToNetwork()
-        guard connectionOnline, additionalCount >= 0 else { return }
+        guard connectionOnline else { return }
         
         self.comicsList = []
         
@@ -104,7 +104,7 @@ class UserState: ObservableObject {
             })
     }
     
-    // MARK: - Load details of a comic including the image and explanation
+    // MARK: - Load details of a comic including the image
     func loadComicDetails(comic: Comic) {
         connectionOnline = Reachability.isConnectedToNetwork()
         guard connectionOnline else { return }
@@ -146,8 +146,4 @@ class UserState: ObservableObject {
                 self.loadComicsWith(comicIDs: comicIDs, context: .comicsSearch)
             })
     }
-    
-    // MARK: - Private Methods
-    
-    
 }

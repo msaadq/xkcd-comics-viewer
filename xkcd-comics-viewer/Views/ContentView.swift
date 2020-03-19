@@ -8,12 +8,14 @@
 
 import SwiftUI
 
+// MARK: - Main Tab Bar View
 struct ContentView: View {
     @State private var selection = 0
     @EnvironmentObject var userState: UserState
     
     var body: some View {
         TabView(selection: $selection){
+            // MARK: - Tab 1 - Comics
             ComicsList().environmentObject(userState)
                 .tabItem {
                     VStack {
@@ -22,6 +24,7 @@ struct ContentView: View {
                     }.accentColor(.red)
             }
             .tag(0)
+            // MARK: - Tab 2 - Search
             Search().environmentObject(userState)
                 .tabItem {
                     VStack {
