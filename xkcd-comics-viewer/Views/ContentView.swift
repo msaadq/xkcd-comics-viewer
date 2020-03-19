@@ -16,26 +16,32 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selection){
             // MARK: - Tab 1 - Comics
-            ComicsList().environmentObject(userState)
+            ComicsList()
+                .environmentObject(userState)
                 .tabItem {
                     VStack {
-                        Image(systemName: "list.dash").font(.title)
+                        Image(systemName: "list.dash")
+                            .font(.title)
                         Text("Comics")
-                    }.accentColor(.red)
+                    }
             }
             .tag(0)
             // MARK: - Tab 2 - Search
-            Search().environmentObject(userState)
+            Search()
+                .environmentObject(userState)
                 .tabItem {
                     VStack {
-                        Image(systemName: "magnifyingglass").font(.title)
+                        Image(systemName: "magnifyingglass")
+                            .font(.title)
                         Text("Search")
                     }
             }
             .tag(1)
-        }.onAppear() {
+        }
+        .onAppear() {
             self.userState.loadLatestComic()
-        }.onDisappear() {
+        }
+        .onDisappear() {
             self.userState.cancellable?.cancel()
         }
     }

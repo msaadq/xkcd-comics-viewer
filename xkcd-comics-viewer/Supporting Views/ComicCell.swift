@@ -13,11 +13,17 @@ struct ComicCell: View {
     
     var body: some View {
         HStack {
-            Text("\(comic.id)").font(.body).frame(width: 40)
+            Text("\(comic.id)")
+                .font(.body)
+                .frame(width: 40)
             VStack(alignment: .leading, spacing: 10) {
-                Text(comic.title).font(.title)
-                Text(comic.publishedDate!.relativeTime).font(.caption).italic()
-            }.padding()
+                Text(comic.title)
+                    .font(.title)
+                Text(comic.publishedDate!.relativeTime)
+                    .font(.caption)
+                    .italic()
+            }
+            .padding()
         }
         
     }

@@ -25,24 +25,33 @@ struct ComicDetails: View {
                     VStack (spacing: 10) {
                         Text("No Internet Connection").font(.title)
                         Button(action: {
-                            self.userState.loadComicDetails(comic: self.comic) }) {
-                                Text("Tap to Retry!")
+                            self.userState.loadComicDetails(comic: self.comic)
+                        }) {
+                            Text("Tap to Retry!")
                         }
                     }
                 } else {
                     // MARK: - Comic title and image with tap button
                     Text(comic.title).font(.title)
                     if comic.image != nil {
-                        Button(action: { self.imageFullscreen = self.shouldAllowLandscape } ) {
+                        Button(action: {
+                            self.imageFullscreen = self.shouldAllowLandscape
+                            
+                        }){
                             VStack(spacing: 6) {
                                 if self.shouldAllowLandscape {
-                                    Text("(Tap to enlarge)").font(.caption)
+                                    Text("(Tap to enlarge)")
+                                        .font(.caption)
                                 }
-                                Image(uiImage: comic.image!).renderingMode(.original).resizable().aspectRatio(contentMode: .fit)
+                                Image(uiImage: comic.image!)
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
                             }
-                        }.disabled(!shouldAllowLandscape)
-                            .sheet(isPresented: $imageFullscreen) {
-                                ImageLandscapeView(image: self.comic.image!)
+                        }
+                        .disabled(!shouldAllowLandscape)
+                        .sheet(isPresented: $imageFullscreen) {
+                            ImageLandscapeView(image: self.comic.image!)
                         }
                         
                     } else {
@@ -50,11 +59,16 @@ struct ComicDetails: View {
                         ActivityIndicator(isAnimating: true)
                     }
                     // MARK: - Comic posting date, description and explanation view button
-                    Text("Posted: \(comic.publishedDate!.relativeTime)").font(.caption).italic()
-                    Text(comic.alt).font(.caption).multilineTextAlignment(.center)
+                    Text("Posted: \(comic.publishedDate!.relativeTime)")
+                        .font(.caption)
+                        .italic()
+                    Text(comic.alt)
+                        .font(.caption)
+                        .multilineTextAlignment(.center)
                     Button(action: {
                         self.userState.connectionOnline = Reachability.isConnectedToNetwork()
-                        self.explanationFullscreen = self.userState.connectionOnline }) {
+                        self.explanationFullscreen = self.userState.connectionOnline
+                    }) {
                         Text("Show Explanation")
                     }
                     .sheet(isPresented: self.$explanationFullscreen) {
@@ -68,10 +82,12 @@ struct ComicDetails: View {
         .onAppear {
             // MARK: - Loads the comic image
             self.userState.loadComicDetails(comic: self.comic)
-        }.onDisappear(){
+        }
+        .onDisappear(){
             // MARK: - Clears up the memory after back navigation in the stack
             self.userState.comicDetails = nil
-        }.onReceive(self.userState.$comicDetails) {
+        }
+        .onReceive(self.userState.$comicDetails) {
             // MARK: - Updated the local comic object after image is retrieved
             self.comic.image = $0?.image
             if let image = self.comic.image {

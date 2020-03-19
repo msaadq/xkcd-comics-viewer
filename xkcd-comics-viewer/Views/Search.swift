@@ -21,7 +21,8 @@ struct Search: View {
                     // MARK: - Network connection error message
                     if !self.userState.connectionOnline {
                         VStack (spacing: 10) {
-                            Text("No Internet Connection").font(.title)
+                            Text("No Internet Connection")
+                                .font(.title)
                             Button(action: {
                                 self.userState.searchComics(name: self.userState.searchText) }) {
                                     Text("Tap to Retry!")
@@ -36,7 +37,8 @@ struct Search: View {
                     // MARK: - List of search results
                     List(userState.searchResults.enumerated().map { $0 }, id: \.element.id) { index, comic in
                         NavigationLink(
-                            destination: ComicDetails(comic: comic).environmentObject(self.userState)
+                            destination: ComicDetails(comic: comic)
+                                .environmentObject(self.userState)
                         ) {
                             ComicCell(comic: comic)
                         }
@@ -44,7 +46,8 @@ struct Search: View {
                 } else {
                     Spacer()
                 }
-            }.onReceive(self.userState.$searchText) {
+            }
+            .onReceive(self.userState.$searchText) {
                 // MARK: - Search operation on searchText update
                 guard !$0.isEmpty else { self.userState.searchResults = []; return }
                 self.userState.searchComics(name: $0)
